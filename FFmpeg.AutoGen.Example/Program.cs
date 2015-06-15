@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FFmpeg.AutoGen.Interop;
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 

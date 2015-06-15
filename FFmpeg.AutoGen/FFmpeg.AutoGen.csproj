@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FFmpeg.AutoGen</RootNamespace>
     <AssemblyName>FFmpeg.AutoGen</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -38,10 +38,146 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AudioCodec.cs" />
+    <Compile Include="AudioDecoderStream.cs" />
+    <Compile Include="AudioEncoderStream.cs" />
+    <Compile Include="DecoderException.cs" />
+    <Compile Include="DecoderStream.cs" />
+    <Compile Include="EncoderException.cs" />
+    <Compile Include="EncoderInformation.cs" />
+    <Compile Include="FifoMemoryStream.cs" />
+    <Compile Include="IAudioStream.cs" />
+    <Compile Include="IMediaStream.cs" />
+    <Compile Include="InteropHelper.cs" />
+    <Compile Include="Interop\Anon10.cs" />
+    <Compile Include="Interop\Anon11.cs" />
+    <Compile Include="Interop\Anon12.cs" />
+    <Compile Include="Interop\Anon5.cs" />
+    <Compile Include="Interop\Anon6.cs" />
+    <Compile Include="Interop\Anon7.cs" />
+    <Compile Include="Interop\Anon8.cs" />
+    <Compile Include="Interop\Anon9.cs" />
+    <Compile Include="Interop\AVActiveFormatDescription.cs" />
+    <Compile Include="Interop\AVAppToDevMessageType.cs" />
+    <Compile Include="Interop\AVAudioFifo.cs" />
+    <Compile Include="Interop\AVAudioServiceType.cs" />
+    <Compile Include="Interop\AVBitStreamFilter.cs" />
+    <Compile Include="Interop\AVBitStreamFilterContext.cs" />
+    <Compile Include="Interop\AVBPrint.cs" />
+    <Compile Include="Interop\AVBuffer.cs" />
+    <Compile Include="Interop\AVBufferPool.cs" />
+    <Compile Include="Interop\AVBufferRef.cs" />
+    <Compile Include="Interop\AVChapter.cs" />
+    <Compile Include="Interop\AVChromaLocation.cs" />
+    <Compile Include="Interop\AVClass.cs" />
+    <Compile Include="Interop\AVCodec.cs" />
+    <Compile Include="Interop\AVCodecContext.cs" />
+    <Compile Include="Interop\AVCodecDefault.cs" />
+    <Compile Include="Interop\AVCodecDescriptor.cs" />
+    <Compile Include="Interop\AVCodecID.cs" />
+    <Compile Include="Interop\AVCodecInternal.cs" />
+    <Compile Include="Interop\AVCodecParser.cs" />
+    <Compile Include="Interop\AVCodecParserContext.cs" />
+    <Compile Include="Interop\AVCodecTag.cs" />
+    <Compile Include="Interop\AVColorPrimaries.cs" />
+    <Compile Include="Interop\AVColorRange.cs" />
+    <Compile Include="Interop\AVColorSpace.cs" />
+    <Compile Include="Interop\AVColorTransferCharacteristic.cs" />
+    <Compile Include="Interop\AVComponentDescriptor.cs" />
+    <Compile Include="Interop\AVDeviceCapabilitiesQuery.cs" />
+    <Compile Include="Interop\AVDeviceInfo.cs" />
+    <Compile Include="Interop\AVDeviceInfoList.cs" />
+    <Compile Include="Interop\AVDeviceRect.cs" />
+    <Compile Include="Interop\AVDevToAppMessageType.cs" />
+    <Compile Include="Interop\AVDictionary.cs" />
+    <Compile Include="Interop\AVDictionaryEntry.cs" />
+    <Compile Include="Interop\AVDiscard.cs" />
+    <Compile Include="Interop\AVDurationEstimationMethod.cs" />
+    <Compile Include="Interop\AVFieldOrder.cs" />
+    <Compile Include="Interop\AVFifoBuffer.cs" />
+    <Compile Include="Interop\AVFilter.cs" />
+    <Compile Include="Interop\AVFilterBuffer.cs" />
+    <Compile Include="Interop\AVFilterBufferRef.cs" />
+    <Compile Include="Interop\AVFilterBufferRefAudioProps.cs" />
+    <Compile Include="Interop\AVFilterBufferRefVideoProps.cs" />
+    <Compile Include="Interop\AVFilterChannelLayouts.cs" />
+    <Compile Include="Interop\AVFilterCommand.cs" />
+    <Compile Include="Interop\AVFilterContext.cs" />
+    <Compile Include="Interop\AVFilterFormats.cs" />
+    <Compile Include="Interop\AVFilterGraph.cs" />
+    <Compile Include="Interop\AVFilterGraphInternal.cs" />
+    <Compile Include="Interop\AVFilterInOut.cs" />
+    <Compile Include="Interop\AVFilterInternal.cs" />
+    <Compile Include="Interop\AVFilterLink.cs" />
+    <Compile Include="Interop\AVFilterPad.cs" />
+    <Compile Include="Interop\AVFilterPool.cs" />
+    <Compile Include="Interop\AVFormatContext.cs" />
+    <Compile Include="Interop\AVFormatInternal.cs" />
+    <Compile Include="Interop\AVFrac.cs" />
+    <Compile Include="Interop\AVFrame.cs" />
+    <Compile Include="Interop\AVFrameSideData.cs" />
+    <Compile Include="Interop\AVFrameSideDataType.cs" />
+    <Compile Include="Interop\AVHWAccel.cs" />
+    <Compile Include="Interop\AVIndexEntry.cs" />
+    <Compile Include="Interop\AVInputFormat.cs" />
+    <Compile Include="Interop\AvIntfloat32.cs" />
+    <Compile Include="Interop\AvIntfloat64.cs" />
+    <Compile Include="Interop\AVIOContext.cs" />
+    <Compile Include="Interop\AVIOInterruptCB.cs" />
+    <Compile Include="Interop\AVLockOp.cs" />
+    <Compile Include="Interop\AVMatrixEncoding.cs" />
+    <Compile Include="Interop\AVMediaType.cs" />
+    <Compile Include="Interop\AVOption.cs" />
+    <Compile Include="Interop\AVOptionRange.cs" />
+    <Compile Include="Interop\AVOptionRanges.cs" />
+    <Compile Include="Interop\AVOptionType.cs" />
+    <Compile Include="Interop\AVOutputFormat.cs" />
+    <Compile Include="Interop\AVPacket.cs" />
+    <Compile Include="Interop\AVPacketList.cs" />
+    <Compile Include="Interop\AVPacketSideData.cs" />
+    <Compile Include="Interop\AVPacketSideDataType.cs" />
+    <Compile Include="Interop\AVPanScan.cs" />
+    <Compile Include="Interop\AVPicture.cs" />
+    <Compile Include="Interop\AVPictureStructure.cs" />
+    <Compile Include="Interop\AVPictureType.cs" />
+    <Compile Include="Interop\AVPixelFormat.cs" />
+    <Compile Include="Interop\AVPixFmtDescriptor.cs" />
+    <Compile Include="Interop\AVProbeData.cs" />
+    <Compile Include="Interop\AVProfile.cs" />
+    <Compile Include="Interop\AVProgram.cs" />
+    <Compile Include="Interop\AVRational.cs" />
+    <Compile Include="Interop\AVResampleContext.cs" />
+    <Compile Include="Interop\AVRounding.cs" />
+    <Compile Include="Interop\AVSampleFormat.cs" />
+    <Compile Include="Interop\AVSideDataParamChangeFlags.cs" />
+    <Compile Include="Interop\AVStream.cs" />
+    <Compile Include="Interop\AVStreamParseType.cs" />
+    <Compile Include="Interop\AVSubtitle.cs" />
+    <Compile Include="Interop\AVSubtitleRect.cs" />
+    <Compile Include="Interop\AVSubtitleType.cs" />
+    <Compile Include="Interop\MotionEstId.cs" />
+    <Compile Include="Interop\MpegEncContext.cs" />
+    <Compile Include="Interop\pp_context.cs" />
+    <Compile Include="Interop\pp_mode.cs" />
+    <Compile Include="Interop\RcOverride.cs" />
+    <Compile Include="Interop\ReSampleContext.cs" />
+    <Compile Include="Interop\SwrContext.cs" />
+    <Compile Include="Interop\SwrDitherType.cs" />
+    <Compile Include="Interop\SwrEngine.cs" />
+    <Compile Include="Interop\SwrFilterType.cs" />
+    <Compile Include="Interop\SwsContext.cs" />
+    <Compile Include="Interop\SwsFilter.cs" />
+    <Compile Include="Interop\SwsVector.cs" />
+    <Compile Include="Interop\Utils.cs" />
+    <Compile Include="IVideoStream.cs" />
+    <Compile Include="MediaFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FFmpegInvoke.cs" />
+    <Compile Include="Interop\FFmpegInvoke.cs" />
+    <Compile Include="VideoDecoderStream.cs" />
+    <Compile Include="VideoScalingStream.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FFmpeg.AutoGen.dll.config">
