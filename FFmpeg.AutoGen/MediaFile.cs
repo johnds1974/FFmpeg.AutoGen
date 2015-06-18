@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using FFmpeg.AutoGen;
 using System.IO;
 using System.Collections.ObjectModel;
@@ -134,6 +135,8 @@ namespace FFmpeg.AutoGen
 
             for (int i = 0; i < _formatContext->nb_streams; i++)
             {
+//                FFmpegInvoke.av_dump_format(_formatContext, i, _filename, 0);
+
                 AVStream stream = *_formatContext->streams[i];
 
                 switch (stream.codec->codec_type)
@@ -159,12 +162,18 @@ namespace FFmpeg.AutoGen
 
             FFmpegInvoke.av_init_packet(&packet);
 
+            // Read a frame from the stream...
             if (FFmpegInvoke.av_read_frame(_formatContext, &packet) < 0)
                 throw new System.IO.EndOfStreamException();
 
             DecoderStream dest = null;
+
             if (_streams.TryGetValue(packet.stream_index, out dest))
+            {
+                Debug.WriteLine("Read frame packet for stream Index: {0}, type:{1}", packet.stream_index, dest);
+
                 dest.PacketQueue.Enqueue(packet);
+            }
             else
                 FFmpegInvoke.av_free_packet(&packet);
         }
@@ -188,6 +197,10 @@ namespace FFmpeg.AutoGen
 
                 if (disposing)
                 {
+                    foreach (var stream in _streams)
+                    {
+                        stream.Value.Dispose();
+                    }
                     _streams = null;
                 }
 

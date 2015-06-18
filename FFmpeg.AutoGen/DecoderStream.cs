@@ -185,7 +185,9 @@ namespace FFmpeg.AutoGen
                 {
                     int len = Math.Min(count, _bufferUsedSize);
 
-                    Utils.CopyArray(_buffer, 0, buffer, offset, len);
+                    Buffer.BlockCopy(_buffer, 0, buffer, 0, len);
+
+//                    Utils.CopyArray(_buffer, 0, buffer, offset, len);
 
                     _bufferUsedSize -= len;
                     offset += len;
@@ -193,7 +195,10 @@ namespace FFmpeg.AutoGen
                     totalRead += len;
 
                     if (_bufferUsedSize > 0)
-                        Utils.CopyArray(_buffer, len, _buffer, 0, _bufferUsedSize);
+                    {
+//                        Utils.CopyArray(_buffer, len, _buffer, 0, _bufferUsedSize);
+                        Buffer.BlockCopy(_buffer, len, _buffer, 0, _bufferUsedSize);
+                    }
                 }
 
                 Debug.Assert(_bufferUsedSize >= 0);

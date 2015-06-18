@@ -1,0 +1,24 @@
+﻿<Window x:Class="WpfVideoPlayerColigo.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:b="clr-namespace:Coligo.Platform.Binder;assembly=Coligo.Platform.WPF"
+        b:Binder.Model="MainWindowViewModel"
+        Title="MainWindow" Height="200" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Image Name="FrameImage" Grid.Row="0" Grid.Column="0" Source="{Binding CurrentFrameImage}"/>
+        <StackPanel Grid.Row="1">
+            <StackPanel Orientation="Horizontal">
+                <Button Name="LoadStream" Content="Load" Margin="5" b:Binder.Bind="$this"/>
+                <Button Name="PlayStream" Content="Play" Margin="5" b:Binder.Bind="$this"/>
+                <Button Name="Stop" Content="Stop" Margin="5" Click="Stop_Click"/>
+                <Button Name="NextFrame" Content="Next Frame" Margin="5" Click="NextFrame_Click"/>
+                <Button Name="WriteAudio" Content="Write Audio" Margin="5" Click="WriteAudio_Click" />
+            </StackPanel>
+            <TextBlock Name="FrameLoadDuration"/>
+        </StackPanel>
+    </Grid>
+</Window>

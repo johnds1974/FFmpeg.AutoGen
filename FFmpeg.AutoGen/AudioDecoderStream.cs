@@ -24,6 +24,7 @@
 #endregion
 
 using System;
+using System.Runtime.InteropServices;
 using FFmpeg.AutoGen;
 using FFmpeg.AutoGen.Interop;
 
@@ -31,10 +32,12 @@ namespace FFmpeg
 {
     public unsafe class AudioDecoderStream : DecoderStream, IAudioStream
     {
+        private AVFrame* _avFrame;
+
         internal AudioDecoderStream(MediaFile file, ref AVStream stream)
             : base(file, ref stream)
         {
-            _buffer = new byte[FFmpegInvoke.FF_MIN_BUFFER_SIZE];
+//            _buffer = new byte[FFmpegInvoke.FF_MIN_BUFFER_SIZE + FFmpegInvoke.FF_INPUT_BUFFER_PADDING_SIZE];
         }
 
         /// <summary>
@@ -96,41 +99,96 @@ namespace FFmpeg
             int packetSize = packet.size;
             byte* packetData = (byte*)packet.data;
 
-            // May be necessary to loop multiple times if more than one frame is in the compressed packet
-            fixed (byte* pBuffer = _buffer)
-            do
+            if (_avFrame == null)
             {
-                if (_disposed)
-                {
-                    _bufferUsedSize = 0;
-                    return false;
-                }
-
-                int outputBufferUsedSize = _buffer.Length - totalOutput; //Must be initialized before sending in as per docs
-
-                short* pcmWritePtr = (short*)(pBuffer + totalOutput);
-
-                fixed (AVPacket* pPacket = &packet)
-                {
-                    int usedInputBytes = FFmpegInvoke.avcodec_decode_audio3(
-                        _avCodecCtx,
-                        pcmWritePtr,
-                        &outputBufferUsedSize,
-                        pPacket
-                        );
-
-                    if (usedInputBytes < 0) //Error in packet, ignore packet
-                        break;
-
-
-                    if (outputBufferUsedSize > 0)
-                        totalOutput += outputBufferUsedSize;
-
-                    packetData += usedInputBytes;
-                    packetSize -= usedInputBytes;
-                }
+                _avFrame = FFmpegInvoke.av_frame_alloc();
             }
-            while (packetSize > 0);
+
+            // May be necessary to loop multiple times if more than one frame is in the compressed packet
+//            fixed (byte* pBuffer = _buffer)
+//            {
+                do
+                {
+                    if (_disposed)
+                    {
+                        _bufferUsedSize = 0;
+                        return false;
+                    }
+
+//                    int outputBufferUsedSize = _buffer.Length - totalOutput;
+                        //Must be initialized before sending in as per docs
+
+//                    short* pcmWritePtr = (short*) (pBuffer + totalOutput);
+
+                    fixed (AVPacket* pPacket = &packet)
+                    {
+                        int gotFrame;
+
+                        var usedInputBytes = FFmpegInvoke.avcodec_decode_audio4(
+                            _avCodecCtx,
+                            _avFrame,
+                            &gotFrame,
+                            pPacket);
+
+                        if (gotFrame > 0)
+                        {
+                            int linesize = 0;
+                            int* pLinesize = &linesize;
+
+                            var buffsize = FFmpegInvoke.av_samples_get_buffer_size(
+                                pLinesize,
+                                _avCodecCtx->channels,
+                                _avFrame->nb_samples,
+                                _avCodecCtx->sample_fmt,
+                                1
+                                );
+
+                            if (_buffer == null || _buffer.Length < buffsize)
+                            {
+                                _buffer = new byte[buffsize];
+                            }
+
+                            for (int i = 0; i < _avFrame->nb_samples*SampleSize; i++)
+                                _buffer[i] = _avFrame->data_0[i];
+
+/*
+                                fixed (byte* pbuffer = _buffer)
+                                {
+                                    for (int i = 0; i < _avFrame->nb_samples; i++)
+                                    {
+                                        if (_avFrame->data_0 != null)
+                                        {
+                                            Utils.CopyArray(_avFrame->data_0, i * SampleSize, pbuffer, i * SampleSize,
+                                                            SampleSize);
+                                        }
+                                    }
+                                }
+*/
+
+                            totalOutput += linesize;
+                        }
+
+/*
+                        int usedInputBytes3 = FFmpegInvoke.avcodec_decode_audio3(
+                            _avCodecCtx,
+                            pcmWritePtr,
+                            &outputBufferUsedSize,
+                            pPacket
+                            );
+*/
+
+                        if (usedInputBytes < 0) //Error in packet, ignore packet
+                            break;
+
+                        //if (outputBufferUsedSize > 0)
+                        //    totalOutput += outputBufferUsedSize;
+
+                        packetData += usedInputBytes;
+                        packetSize -= usedInputBytes;
+                    }
+                } 
+                while (packetSize > 0);
+//            }
 
             _bufferUsedSize = totalOutput;
             return true;
@@ -143,6 +201,7 @@ namespace FFmpeg
         /// <returns></returns>
         public bool ReadSample(out byte[] sample)
         {
+
             sample = new byte[SampleSize];
 
             int count = Read(sample, 0, SampleSize);
